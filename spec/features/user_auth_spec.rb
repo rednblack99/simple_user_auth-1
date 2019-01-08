@@ -45,7 +45,7 @@ RSpec.feature 'User Authentication' do
       expect(page).to have_content 'Sign up'
       expect(page).to have_content 'Sign in'
     end
-    
+
   end
 
   scenario "Won't let unregistered user login" do
@@ -54,6 +54,22 @@ RSpec.feature 'User Authentication' do
     fill_in :email, with: 'I do not exist'
     fill_in :password, with: 'Rubbish password'
     click_button 'Sign in'
+    expect(page).to have_content 'Sign up'
+    expect(page).to have_content 'Sign in'
+  end
+
+  scenario "Won't let register with existing email" do
+    visit '/'
+    click_on 'Sign up'
+    fill_in :email, with: 'test@test.com'
+    fill_in :password, with: 'secret123'
+    click_button 'Sign up'
+    click_button 'Log out'
+    click_on 'Sign up'
+    fill_in :email, with: 'test@test.com'
+    fill_in :password, with: 'secret123456'
+    click_button 'Sign up'
+    expect(page.current_path).to eq '/'
     expect(page).to have_content 'Sign up'
     expect(page).to have_content 'Sign in'
   end

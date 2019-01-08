@@ -1,7 +1,7 @@
 require_relative '../lib/user'
 
 describe User do
-  
+
   context 'user.authenticate' do
     let!(:user) { User.create(email: 'test@test.com', password: 'secret123')}
 
@@ -16,6 +16,16 @@ describe User do
     it "returns user if username and password are both correct" do
       expect(User.authenticate('test@test.com', "secret123")).to eq user
     end
-  
+
   end
+
+  context 'user.exists?' do
+    let!(:user) { User.create(email: 'test@test.com', password: 'secret123')}
+
+    it "returns true if user signup already exists" do
+      expect(User.exists?('test@test.com')).to eq true
+    end
+
+  end
+
 end
