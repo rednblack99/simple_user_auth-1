@@ -24,11 +24,8 @@ class UserAuth < Sinatra::Base
   end
 
   post '/signup' do
-    if User.exists?(params[:email])
-      redirect '/'
-    else
-      user = User.create(email: params[:email], password: params[:password])
-    end
+    user = User.create(email: params[:email], password: params[:password])
+    redirect '/' unless user.valid?
     if user
       session[:user_id] = user.id
       redirect '/profile'
